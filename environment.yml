@@ -1,0 +1,20 @@
+name: fashion-product-classification
+dependencies:
+- python=3.6
+- pip
+- pip:
+  - ijson
+  - ujson
+  - toolz
+  - yattag
+  - pillow
+  - pyrsistent
+  - numpy
+  - simplejson
+  - matplotlib
+  - opencv-python
+  - Keras==2.1.2 # arg, only used in image re-scaling
+  - tensorflow-gpu==1.1.0
+  - scikit-learn
+  - scipy
+  - requests

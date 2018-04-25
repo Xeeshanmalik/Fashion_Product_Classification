@@ -1,0 +1,6 @@
+data/*
+.DS_Store
+.idea/
+test_images/
+train_images/
+validation_images/
