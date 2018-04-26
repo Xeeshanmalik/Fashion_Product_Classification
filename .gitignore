@@ -4,3 +4,4 @@ data/*
 test_images/
 train_images/
 validation_images/
+preparation/
