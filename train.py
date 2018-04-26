@@ -31,15 +31,13 @@ if __name__ == '__main__':
         os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
         os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
-    with open(os.path.join(root_dir,args.input_metadata_file), 'rb') as json_file:
-        objects = ijson.items(json_file, 'item')
-
-        for line in islice(objects, 100000000):
-            print(line['imageId'])
-            print(line['label'])
+    # Get distinct Classes
 
     file = open(args.class_file, 'r')
     classes = file.readlines()
+
+    distinct_classes = len(classes)
+
 
 
 
