@@ -8,6 +8,15 @@ from functools import partial
 from multiprocessing import Pool
 import time
 import shutil
+import requests
+
+
+def read_image(images, annotations):
+    image_data = requests.get(images['url']).content
+    with open(os.path.join(args.base_image_path, str(annotations['imageId']) + ".jpg"), "wb") as handler:
+        handler.write(image_data)
+
+    return {'imageId': images['imageId'], 'url': images['url'], 'labelId': annotations['labelId']}
 
 
 def create_sets(base_image_path, path, item):
@@ -18,7 +27,7 @@ def create_sets(base_image_path, path, item):
     for index, label in enumerate(labels):
         if os.path.isfile(os.path.join(base_image_path, image_id) + '.jpg') and os.stat(os.path.join(base_image_path, image_id) + '.jpg').st_size > 128:
             new_image_name = label + '_' + image_id
-            if index == maxlen - 1 :
+            if index == maxlen - 1:
                 shutil.move((os.path.join(base_image_path, image_id) + '.jpg'), os.path.join(path, label)+'/'
                             + new_image_name + '.jpg')
             else:
@@ -69,13 +78,14 @@ if __name__ == '__main__':
 
     preparation_set = compose(partial(create_sets,
                                       args.base_image_path,
-                                      args.preparation_set_image_path))
+                                      args.preparation_set_image_path),
+                              read_image)
 
     p = Pool(args.number_of_processes)
 
     start = time.clock()
 
-    for image in p.imap(preparation_set, items['annotations'], args.chunk_size):
+    for image in map(preparation_set, items['images'],  items['annotations']):
         print("Successfully Saved:", image['image_id'] + '.jpg')
 
     print("Total Time:", time.clock() - start)
